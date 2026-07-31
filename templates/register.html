@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="auth-wrapper animate-fade-in">
+  <div class="card auth-card shadow-lg border-0">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold mb-2">Create Account</h2>
+      <p class="text-white">Join Student Skillset Analyzer and start tracking your skills</p>
+    </div>
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <div class="mb-4">
+        {{ form.email.label(class_='form-label') }}
+        {{ form.email(class_='form-control', placeholder='name@example.com') }}
+      </div>
+      <div class="mb-4">
+        {{ form.password.label(class_='form-label') }}
+        {{ form.password(class_='form-control', placeholder='••••••••') }}
+      </div>
+      <div class="mb-4">
+        {{ form.confirm_password.label(class_='form-label') }}
+        {{ form.confirm_password(class_='form-control', placeholder='••••••••') }}
+      </div>
+      <div class="d-grid mb-3">
+        {{ form.submit(class_='btn btn-success btn-lg') }}
+      </div>
+      <div class="text-center mt-4">
+        <span class="text-white">Already have an account?</span>
+        <a class="text-decoration-none fw-bold text-primary" href="{{ url_for('login') }}">Sign in</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

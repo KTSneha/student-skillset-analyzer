@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Welcome Section -->
+<div class="welcome-section mb-5 animate-fade-in delay-1">
+  <div class="row align-items-center">
+    <div class="col-lg-8">
+      <h2><i class="bi bi-hand-thumbs-up"></i> Welcome, {{ profile.full_name or current_user.email }}</h2>
+      <p class="mb-0">Your personalized skill tracking dashboard</p>
+    </div>
+    <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+      <span class="badge badge-{{ 'success' if profile.placement_status else 'warning' }}">
+        <i class="bi bi-{{ 'check-circle' if profile.placement_status else 'exclamation-circle' }}"></i>
+        {{ 'Placement Eligible' if profile.placement_status else 'Not Yet Eligible' }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid animate-fade-in delay-2">
+  <div class="stat-card success">
+    <div class="stat-value">{{ profile.skill_score or 0 }}%</div>
+    <div class="stat-label"><i class="bi bi-star-fill"></i> Overall Score</div>
+  </div>
+  <div class="stat-card info">
+    <div class="stat-value">{{ profile.skill_summary().values()|list|length }}</div>
+    <div class="stat-label"><i class="bi bi-book"></i> Skills Tracked</div>
+  </div>
+  <div class="stat-card warning">
+    <div class="stat-value">{{ weak_areas_count }}</div>
+    <div class="stat-label"><i class="bi bi-exclamation-triangle"></i> Weak Areas</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ recommendations|length }}</div>
+    <div class="stat-label"><i class="bi bi-lightbulb"></i> Recommendations</div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- Main Content Row -->
+<div class="row g-4 animate-fade-in delay-3">
+  <!-- Left Column: Main Charts -->
+  <div class="col-lg-8">
+    <!-- Skill Score Progress -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-graph-up"></i> Overall Progress
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="card-subtitle">Current Skill Score</span>
+          <span class="badge badge-primary">{{ profile.skill_score or 0 }}%</span>
+        </div>
+        <div id="scoreProgress" class="progress" style="height: 2rem;">
+          <div class="progress-bar" role="progressbar" style="width: {{ profile.skill_score or 0 }}%;" aria-valuenow="{{ profile.skill_score or 0 }}" aria-valuemin="0" aria-valuemax="100">
+            {{ profile.skill_score or 0 }}%
+          </div>
+        </div>
+        <small class="text-white d-block mt-2">
+          <i class="bi bi-info-circle"></i> Aim for 100% to be fully placement-ready!
+        </small>
+      </div>
+    </div>
+
+    <!-- Skill Distribution Chart -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-pie-chart"></i> Skill Distribution
+      </div>
+      <div class="card-body">
+        <div id="skillDistribution"></div>
+      </div>
+    </div>
+
+    <!-- Score Progress Over Time Chart -->
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-line-chart"></i> Performance Trend
+      </div>
+      <div class="card-body">
+        <div id="progressLine"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Sidebar -->
+  <div class="col-lg-4">
+    <!-- Weak Areas Card -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-exclamation-circle"></i> Areas to Improve
+      </div>
+      <div class="card-body">
+        {% if weak_areas %}
+          {% for skill, value in weak_areas.items() %}
+            <div class="weak-area-item">
+              <span class="weak-area-label">{{ skill }}</span>
+              <span class="weak-area-value">
+                {% if skill == 'Projects' %}{{ value }}/5
+                {% elif skill == 'Internships' %}{{ value }}/3
+                {% elif skill == 'Aptitude' %}{{ value }}/100
+                {% elif skill == 'Study Hours/Week' %}{{ value }}/60
+                {% else %}{{ value }}/10{% endif %}
+              </span>
+            </div>
+          {% endfor %}
+          <a class="btn btn-primary btn-sm w-100 mt-3" href="{{ url_for('profile') }}">
+            <i class="bi bi-pencil-square"></i> Improve Skills
+          </a>
+        {% else %}
+          <div class="alert alert-success mb-0">
+            <i class="bi bi-check-circle"></i> Great job! All your skills are strong!
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Recommendations Card -->
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-stars"></i> Smart Recommendations
+      </div>
+      <div class="card-body">
+        {% if recommendations %}
+          {% for item in recommendations %}
+            <div class="recommendation-item">
+              <i class="bi bi-arrow-right-circle"></i> {{ item }}
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="alert alert-info mb-0">
+            <i class="bi bi-info-circle"></i> No recommendations at this time. Keep up the great work!
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="section-divider mt-5"></div>
+<div class="row g-4 mt-3">
+  <div class="col-md-6 col-lg-3">
+    <a href="{{ url_for('profile') }}" class="btn btn-primary w-100">
+      <i class="bi bi-person-lines-fill"></i> Edit Profile
+    </a>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <a href="{{ url_for('report') }}" class="btn btn-outline-primary w-100">
+      <i class="bi bi-download"></i> Download Report
+    </a>
+  </div>
+</div>
+
+<!-- Charts Script -->
+<script>
+  const skillData = {{ skill_chart | tojson }};
+  const historyData = {{ score_history | tojson }};
+  
+  if (Object.keys(skillData).length > 0) {
+    const skillNames = Object.keys(skillData);
+    const skillValues = Object.values(skillData);
+    
+    const normalizedY = skillNames.map((skill, i) => {
+        let val = skillValues[i];
+        if(skill === 'Projects') return Math.min((val / 5) * 10, 10);
+        if(skill === 'Internships') return Math.min((val / 3) * 10, 10);
+        if(skill === 'Aptitude') return Math.min((val / 100) * 10, 10);
+        if(skill === 'Study Hours/Week') return Math.min((val / 60) * 10, 10);
+        return Math.min(val, 10);
+    });
+
+    const displayTexts = skillNames.map((skill, i) => {
+        let v = skillValues[i];
+        if(skill === 'Projects') return v + '/5';
+        if(skill === 'Internships') return v + '/3';
+        if(skill === 'Aptitude') return v + '/100';
+        if(skill === 'Study Hours/Week') return v + '/60';
+        return v + '/10';
+    });
+    
+    const barTrace = {
+      x: skillNames,
+      y: normalizedY,
+      type: 'bar',
+      marker: {
+        color: 'rgba(99, 102, 241, 0.8)',
+        line: {
+          color: 'rgba(99, 102, 241, 1)',
+          width: 0
+        }
+      },
+      text: displayTexts,
+      textposition: 'outside',
+      hovertemplate: '<b>%{x}</b><br>Score: %{text}<extra></extra>'
+    };
+    
+    Plotly.newPlot('skillDistribution', [barTrace], {
+      title: {text: '', font: {size: 0}},
+      margin: {b: 40, l: 40, r: 20, t: 20},
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      font: {family: 'Segoe UI, sans-serif'},
+      xaxis: {showgrid: false, tickfont: {color: '#94a3b8'}},
+      yaxis: {showgrid: true, gridcolor: 'rgba(255,255,255,0.1)', range: [0, 10], tickfont: {color: '#94a3b8'}}
+    }, {responsive: true});
+  }
+  
+  if (historyData && historyData.length > 0) {
+    const scatterTrace = {
+      x: historyData.map(d => new Date(d.timestamp)),
+      y: historyData.map(d => d.score),
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Score',
+      line: {
+        color: 'rgba(99, 102, 241, 1)',
+        width: 3,
+        shape: 'spline'
+      },
+      marker: {
+        size: 8,
+        color: 'rgba(99, 102, 241, 1)',
+        line: {color: '#fff', width: 2}
+      },
+      fill: 'tozeroy',
+      fillcolor: 'rgba(99, 102, 241, 0.1)',
+      hovertemplate: '<b>%{x|%b %d, %Y}</b><br>Score: %{y}%<extra></extra>'
+    };
+    
+    Plotly.newPlot('progressLine', [scatterTrace], {
+      title: {text: '', font: {size: 0}},
+      xaxis: {
+        title: {text: 'Date', font: {color: '#94a3b8'}},
+        showgrid: true,
+        gridcolor: 'rgba(255,255,255,0.1)',
+        type: 'date',
+        tickfont: {color: '#94a3b8'}
+      },
+      yaxis: {
+        title: {text: 'Score (%)', font: {color: '#94a3b8'}},
+        showgrid: true,
+        gridcolor: 'rgba(255,255,255,0.1)',
+        range: [0, 100],
+        tickfont: {color: '#94a3b8'}
+      },
+      margin: {b: 40, l: 60, r: 20, t: 20},
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      font: {family: 'Segoe UI, sans-serif'}
+    }, {responsive: true});
+  }
+</script>
+{% endblock %}

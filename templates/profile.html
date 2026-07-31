@@ -1,0 +1,205 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row g-4 animate-fade-in delay-1">
+  <div class="col-lg-10 mx-auto">
+    <div class="card shadow-lg border-0">
+      <div class="card-header">
+        <i class="bi bi-person-fill"></i> Complete Student Profile
+      </div>
+      <div class="card-body">
+        <form method="post" novalidate>
+          {{ form.hidden_tag() }}
+
+          <!-- Personal Information Section -->
+          <div class="mb-4">
+            <h5 class="mb-3">
+              <i class="bi bi-info-circle"></i> Personal Information
+            </h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                {{ form.full_name.label(class_='form-label fw-bold') }} {{
+                form.full_name(class_='form-control') }} {% if
+                form.full_name.errors %}
+                <div class="text-danger small mt-1">
+                  {{ form.full_name.errors[0] }}
+                </div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                {{ form.gender.label(class_='form-label fw-bold') }}
+                {{ form.gender(class_='form-select') }}
+              </div>
+              <div class="col-md-6">
+                {{ form.city.label(class_='form-label fw-bold') }} {{
+                form.city(class_='form-control', placeholder='Your city') }}
+              </div>
+              <div class="col-md-6">
+                {{ form.cgpa.label(class_='form-label fw-bold') }} {{
+                form.cgpa(class_='form-control', placeholder='0.0 - 10.0') }}
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <!-- Technical Skills Section -->
+          <div class="mb-4">
+            <h5 class="mb-3">
+              <i class="bi bi-code-square"></i> Technical Skills
+            </h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                {{ form.programming_skill.label(class_='form-label fw-bold') }}
+                {{ form.programming_skill(class_='form-control', min=1, max=10)
+                }}
+              </div>
+              <div class="col-md-6">
+                {{ form.communication_skill.label(class_='form-label fw-bold')
+                }} {{ form.communication_skill(class_='form-control', min=1,
+                max=10) }}
+              </div>
+              <div class="col-md-6">
+                {{ form.aptitude_score.label(class_='form-label fw-bold') }} {{
+                form.aptitude_score(class_='form-control', placeholder='0 -
+                100') }}
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold" for="study_hours_per_week"
+                  >Study Hours Per Week</label
+                >
+                {{ form.study_hours_per_week(class_='form-control',
+                placeholder='Hours per week') }}
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <!-- Academic & Experience Section -->
+          <div class="mb-4">
+            <h5 class="mb-3">
+              <i class="bi bi-mortarboard"></i> Academic & Experience
+            </h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                {{ form.projects.label(class_='form-label fw-bold') }} {{
+                form.projects(class_='form-control', placeholder='Number of
+                projects') }}
+              </div>
+              <div class="col-md-6">
+                {{ form.internships.label(class_='form-label fw-bold') }} {{
+                form.internships(class_='form-control', placeholder='Number of
+                internships') }}
+              </div>
+              <div class="col-md-6">
+                {{ form.backlogs.label(class_='form-label fw-bold') }} {{
+                form.backlogs(class_='form-control', placeholder='Number of
+                backlogs') }}
+              </div>
+              <div class="col-md-6">
+                {{ form.attendance_percent.label(class_='form-label fw-bold') }}
+                {{ form.attendance_percent(class_='form-control', placeholder='0
+                - 100 %') }}
+              </div>
+              <div class="col-md-12">
+                {{ form.certifications.label(class_='form-label fw-bold') }} {{
+                form.certifications(class_='form-control',
+                placeholder='Comma-separated certifications (e.g., AWS, Google
+                Cloud, Azure)') }}
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <!-- Placement & Salary Section -->
+          <div class="mb-4">
+            <h5 class="mb-3">
+              <i class="bi bi-briefcase"></i> Placement & Salary
+            </h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-check form-switch">
+                  {{ form.placed(class_='form-check-input') }} {{
+                  form.placed.label(class_='form-check-label fw-bold') }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                {{ form.salary_lpa.label(class_='form-label fw-bold') }} {{
+                form.salary_lpa(class_='form-control', placeholder='Salary in
+                LPA') }}
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <!-- Resume Section -->
+          <div class="mb-4">
+            <h5 class="mb-3">
+              <i class="bi bi-file-text"></i> Resume / Experience Summary
+            </h5>
+            {{ form.resume_text.label(class_='form-label fw-bold') }} {{
+            form.resume_text(class_='form-control', rows=5, placeholder='Add
+            your resume or experience summary...') }}
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-5">
+            {{ form.submit(class_='btn btn-primary btn-lg') }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-label {
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .form-control,
+  .form-select,
+  .form-check-input {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    color: white;
+  }
+
+  hr {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    border: none;
+    height: 1px;
+    margin: 2.5rem 0;
+  }
+
+  h5 {
+    color: var(--primary-light);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+  }
+  
+  .card-header {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 1.25rem;
+  }
+</style>
+
+{% endblock %}

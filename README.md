@@ -1,39 +1,106 @@
 # 🎓 Student Skillset Analyzer
 
-A Machine Learning-based web application that analyzes student skills, predicts placement readiness, and provides personalized recommendations for skill improvement.
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-Web%20Framework-black?logo=flask)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange?logo=scikitlearn)
+![SQLite](https://img.shields.io/badge/SQLite-Database-blue?logo=sqlite)
+![Render](https://img.shields.io/badge/Render-Deployed-success?logo=render)
+![License](https://img.shields.io/badge/License-Educational-green)
+
+A Machine Learning-based web application that analyzes student skills, predicts placement readiness, and provides personalized recommendations to help students improve their employability.
+
+---
+
+## 🚀 Live Demo
+
+🌐 **Application:** 
+
+    https://student-skillset-analyzer.onrender.com
 
 ---
 
 ## 📌 Project Overview
 
-The Student Skillset Analyzer helps students evaluate their technical skills and placement readiness using Machine Learning. The application analyzes student data, predicts performance, and generates recommendations to improve employability.
+Student Skillset Analyzer is designed to evaluate a student's technical and soft skills using Machine Learning algorithms. Based on the provided information, the application predicts placement readiness and generates personalized recommendations for skill improvement.
+
+The application also includes user authentication, profile management, dashboard visualization, and PDF report generation.
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
-- Student Skill Analysis
-- Placement Readiness Prediction
-- Personalized Skill Recommendations
-- Interactive Dashboard
-- Data Visualization
-- Automated Report Generation
-- Secure Data Storage
-- User-Friendly Web Interface
+- 🔐 User Registration & Login
+- 👤 Student Profile Management
+- 🤖 Machine Learning-based Skill Prediction
+- 📊 Interactive Dashboard
+- 📈 Placement Readiness Analysis
+- 💡 Personalized Recommendations
+- 📄 Downloadable PDF Report
+- 👨‍💼 Admin Dashboard
 
 ---
 
 ## 🛠️ Tech Stack
 
+### Frontend
+- HTML5
+- CSS3
+- Bootstrap
+- JavaScript
+
+### Backend
 - Python
 - Flask
-- HTML
-- CSS
-- SQLite
+
+### Machine Learning
+- Scikit-learn
 - Pandas
 - NumPy
-- Scikit-learn
+
+### Database
+- SQLite
+
+### Visualization
 - Plotly
+
+### Authentication
+- Flask Login
+- Flask-WTF
+
+### Deployment
+- Render
+
+---
+
+## 📸 Application Screenshots
+
+### 🏠 Home Page
+
+![Home](screenshots/home.png)
+
+---
+
+### 📊 Student Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+### 👤 Student Profile
+
+![Profile](screenshots/profile.png)
+
+---
+
+### 👨‍💼 Admin Dashboard
+
+![Admin Dashboard](screenshots/admin.png)
+
+---
+
+### 📄 PDF Report
+
+![Report](screenshots/report.png)
 
 ---
 
@@ -48,11 +115,15 @@ student-skillset-analyzer/
 ├── forms.py
 ├── recommender.py
 ├── ml_utils.py
-├── train_skill_model.py
 ├── requirements.txt
-├── templates/
-├── static/
+├── skill_model.pkl
+├── skill_scaler.pkl
+├── skta.db
+│
 ├── data/
+├── static/
+├── templates/
+├── screenshots/
 └── README.md
 ```
 
@@ -60,63 +131,108 @@ student-skillset-analyzer/
 
 ## ⚙️ Installation
 
-Clone the repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/KTSneha/student-skillset-analyzer.git
 ```
 
-Move into the project directory
-
 ```bash
 cd student-skillset-analyzer
 ```
 
-Install dependencies
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Activate Environment
+
+Windows
+
+```bash
+venv\Scripts\activate
+```
+
+Linux / macOS
+
+```bash
+source venv/bin/activate
+```
+
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application
+### Run Application
 
 ```bash
 python app.py
 ```
 
----
+Application runs on
 
-## 📊 Technologies Used
-
-- Machine Learning
-- Data Analysis
-- Data Visualization
-- Flask Web Development
-- Database Management
-- Recommendation System
+```
+http://127.0.0.1:5000
+```
 
 ---
 
-## 📈 Future Enhancements
+## 📈 Machine Learning Workflow
 
-- User Authentication
-- Cloud Deployment
-- Real-time Analytics
-- Enhanced Dashboard
-- AI-powered Career Recommendations
+- Data Collection
+- Data Preprocessing
+- Feature Engineering
+- Model Training
+- Prediction
+- Recommendation Generation
+- Placement Readiness Analysis
 
 ---
 
-## 👩‍💻 Author
+## 🎯 Project Objectives
 
-**Sneha**
+- Analyze student skill sets
+- Predict placement readiness
+- Identify skill gaps
+- Recommend improvement strategies
+- Improve employability through data-driven insights
 
-GitHub:
+---
+
+## 👩‍💻 Developed By
+
+**Sneha K T**
+
+🎓 B.E. Computer Science & Engineering
+
+💼 Aspiring Data Analyst | Business Analyst | MIS Analyst
+
+---
+
+## 🔗 Connect With Me
+
+### GitHub
+
 https://github.com/KTSneha
 
-LinkedIn:
+### LinkedIn
+
 https://www.linkedin.com/in/sneha-timmavvagol/
 
 ---
 
-## ⭐ If you found this project useful, consider giving it a Star.
+## ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
+
+It motivates me to build more projects.
+
+---
+
+## 📄 License
+
+This project is developed for educational and portfolio purposes.
